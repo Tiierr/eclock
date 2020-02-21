@@ -1,6 +1,6 @@
 <template>
-  <div id="sdsc">
-      <svg ref="singleDigitStaticClock" class="singleDigitStaticClock"></svg>
+  <div id="sdc">
+    <svg ref="singleDigitClock" class="singleDigitClock"></svg>
   </div>
 </template>
 
@@ -8,22 +8,49 @@
   import * as d3 from 'd3'
   import baseClock from './base';
   import {spriteGrids} from '../data';
+  import {interpolateGrid} from '../animation';
 
   export default {
-    name: 'singleDigitStaticClock.vue',
+    name: 'singleDigitClock',
     extends: baseClock,
     mounted (){
       this.renderChart();
     },
     watch: {},
     methods: {
-      renderChart () {
-        const size = 2 * this.settings.radius;
+      renderChart(){
+        // Prepare SVG with width
+        const size = 5 * this.settings.radius;
+        const svgNode = d3.select(this.$refs.singleDigitClock)
+          .attr('width', size);
 
-        // Create SVG that can fit all the clocks
-        var svgNode = d3.select(this.$refs.singleDigitStaticClock)
-          .attr('width', size * 3);
-        this.updateSvg(svgNode, spriteGrids[9]);
+        // Update the SVG 60 times per second
+        const framesPerSecond = 60;
+
+        setInterval(() => {
+          this.transitByIntervalForDigitClock(svgNode)
+        }, 1000 / framesPerSecond)
+
+      },
+      transitByIntervalForDigitClock(svgNode){
+        // Change to the next digit every 4000 milliseconds
+        const interval = 4000;
+
+        // Calculate current and next digit and normalized time
+        const time = new Date().getTime();
+        const digit = Math.floor(time / interval) % 10;
+        const nextDigit = (digit + 1) % 10;
+        const normalizedTime = (time % interval) / interval;
+
+        // Update with interpolation between current and next digit
+        this.updateSvg(
+          svgNode,
+          interpolateGrid(
+            spriteGrids[digit],
+            spriteGrids[nextDigit],
+            normalizedTime
+          )
+        );
       },
     },
   }

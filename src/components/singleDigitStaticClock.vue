@@ -1,15 +1,16 @@
 <template>
-  <div>
-      <svg ref="singleStaticClock" class="singleStaticClock"></svg>
+  <div id="sdsc">
+      <svg ref="singleDigitStaticClock" class="singleDigitStaticClock"></svg>
   </div>
 </template>
 
 <script>
   import * as d3 from 'd3'
   import baseClock from './base';
+  import {spriteGrids} from '../data';
 
   export default {
-    name: 'singleStaticClock',
+    name: 'singleDigitStaticClock.vue',
     extends: baseClock,
     mounted (){
       this.renderChart();
@@ -17,18 +18,12 @@
     watch: {},
     methods: {
       renderChart () {
-        const hours = 2;
-        // Create SVG that can fit a clock with the configured radius
         const size = 2 * this.settings.radius;
-        const svgNode = d3.select(this.$refs.singleStaticClock)
-          .attr('width', size)
-          .attr('height', size);
 
-        // Add the clock and set the time
-        svgNode
-          .call(this.addClock)
-          .datum(hours)
-          .call(this.updateClock);
+        // Create SVG that can fit all the clocks
+        var svgNode = d3.select(this.$refs.singleDigitStaticClock)
+          .attr('width', size * 3);
+        this.updateSvg(svgNode, spriteGrids[9]);
       },
     },
   }

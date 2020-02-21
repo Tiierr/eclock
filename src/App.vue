@@ -1,17 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <single-static-clock></single-static-clock>
+    <different-shape-static-clock></different-shape-static-clock>
+    <single-digit-static-clock></single-digit-static-clock>
+
+    <single-clock></single-clock>
+    <single-digit-clock></single-digit-clock>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import Clock from './components/Clock.vue'
+import singleStaticClock from './components/singleStaticClock'
+import singleClock from './components/singleClock'
+import differentShapeStaticClock from './components/differentShapeStaticClock'
+
+import singleDigitStaticClock from './components/singleDigitStaticClock'
+import singleDigitClock from './components/singleDigitClock'
+
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    // Clock,
+    singleStaticClock,
+    singleClock,
+    differentShapeStaticClock,
+    singleDigitStaticClock,
+    singleDigitClock,
   }
 }
 </script>
